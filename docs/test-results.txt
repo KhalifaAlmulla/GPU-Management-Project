@@ -1,0 +1,71 @@
+PASS | admin login uses the published credentials
+PASS | admin login rejects wrong password and identity
+PASS | administrator login survives save and reload
+PASS | registration remains pending
+PASS | duplicate registration rejected
+PASS | approval assigns 100
+PASS | repeated approval blocked
+PASS | approved student login
+PASS | wrong password rejected
+PASS | pending account cannot log in
+PASS | rejection stored and blocks login
+PASS | bad IDs and emails rejected
+PASS | jobs require initialized clock
+PASS | clock initialized once only
+PASS | admin credentials required
+PASS | four IDs in order
+PASS | four simultaneous running
+PASS | fifth queued
+PASS | same-minute FCFS and job IDs
+PASS | smallest GPU allocated first
+PASS | queued predictions include running
+PASS | prediction handles unequal GPU finishing times
+PASS | waiting shrinks with clock advancement
+PASS | completed jobs charge full runtime
+PASS | dispatch exactly when GPU frees
+PASS | actual queued wait is five
+PASS | queued cancellation costs zero
+PASS | running cancellation charges elapsed only
+PASS | admin cancels student's job
+PASS | other students forbidden from cancelling
+PASS | permissions block student reviewing requests
+PASS | exact balance matching accepted
+PASS | insufficient balance rejected
+PASS | zero balance blocks only NEW jobs
+PASS | no duplicate charges
+PASS | allowance never goes below zero
+PASS | terminal jobs cannot be restarted
+PASS | running job cannot complete early
+PASS | utilization N/A at minute zero
+PASS | utilization 100% with four running
+PASS | cancelled runtime included in utilization
+PASS | allowance grants record reason
+PASS | grant missing reason rejected
+PASS | set allocation to used plus reserved is valid
+PASS | snapshot save and restore retains running
+PASS | save restores pending and rejected requests
+PASS | corrupt save is reported
+PASS | missing file starts empty without data loss
+PASS | sample has five approved, 20 jobs and four states
+PASS | student job view filters other accounts
+PASS | running cancellation dispatches queued job instantly
+PASS | predictions never allocate queued jobs
+PASS | invalid job fields and cancellation reason blocked
+PASS | saved queued jobs retain predictions and advance correctly
+PASS | missing registration fields show validation error
+PASS | blank and too-long registration passwords are rejected
+PASS | oversize registration email is rejected
+PASS | duplicate IDs ignore letter case
+PASS | invalid phone number is rejected
+PASS | two simultaneous completions start next jobs in GPU ID order
+PASS | queue prediction respects ties and earlier queued jobs
+PASS | queued cancellation updates positions and leaves no GPU
+PASS | allocation history shows original and new values
+PASS | extra grant history includes reason and both totals
+PASS | save restores cancellation records and minute charges
+PASS | students cannot edit allocations or advance clock
+PASS | running cancellation requires recorded reason
+PASS | Job.compareTo orders by submission time, then job ID
+PASS | canManage: admin any job, student only own jobs
+PASS | demo data uses the five named students
+RESULT: 70 passed; 0 failed; total 70
