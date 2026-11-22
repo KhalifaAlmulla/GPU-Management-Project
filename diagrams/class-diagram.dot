@@ -1,0 +1,49 @@
+digraph UML {
+ graph [rankdir=TB, bgcolor="white", splines=ortho, nodesep=0.35, ranksep=0.55, pad=0.2];
+ node [shape=record, style="filled", fillcolor="#F4F7FB", color="#2F4F6F", fontname="DejaVu Sans", fontsize=10, margin=0.06];
+ edge [color="#445566", fontname="DejaVu Sans", fontsize=9, arrowsize=0.8];
+
+ Main [label="{Main|+ SAVE_FILE: Path\l|+ main(String[]): void\l}"];
+ LoginFrame [label="{LoginFrame extends JFrame|- scheduler: Scheduler\l- idField: JTextField\l- passwordField: JPasswordField\l|- login(): void\l- register(): void\l}"];
+ DashboardFrame [label="{«abstract» DashboardFrame extends JFrame|# scheduler: Scheduler\l# user: User\l# tabs: JTabbedPane\l# clockLabel: JLabel\l|# refresh(): void  «abstract»\l# refreshAll(): void\l# runAction(Runnable): void\l# logout(): void\l# fillJobs(JTable, ArrayList\<Job\>, String): void\l# fillHistory(JTable, ArrayList\<Job\>): void\l# cancelSelectedJob(JTable): void\l}"];
+ AdminFrame [label="{AdminFrame|- gpuTable, balanceTable, requestTable,\l   studentTable, jobTable, historyTable: JTable\l|- buildOverviewTab(): JPanel\l- reviewSelected(boolean): void\l- setAllocation(): void\l- grantMinutes(): void\l# refresh(): void\l}"];
+ StudentFrame [label="{StudentFrame|- student: Student\l- jobTable, historyTable: JTable\l|- buildSubmitTab(): JPanel\l- buildJobsTab(): JPanel\l# refresh(): void\l}"];
+
+ Scheduler [label="{Scheduler  «implements Serializable»|- students: ArrayList\<Student\>\l- requests: ArrayList\<AccessRequest\>\l- jobs: ArrayList\<Job\>\l- gpus: ArrayList\<GPU\>\l- allowanceHistory: ArrayList\<String\>\l- administrator: Administrator\l- nextJobId: int\l- initialTime, now: LocalDateTime\l|+ loginAdmin(String, String): Administrator\l+ loginStudent(String, String): Student\l+ register(id, name, email, phone, password): void\l+ reviewRequest(User, String, boolean): void\l+ initializeClock(User, LocalDateTime): void\l+ setAllocation(User, String, int): void\l+ grantMinutes(User, String, int, String): void\l+ submitJob(Student, title, app, description, size): Job\l+ advanceMinute(User): void\l+ cancelJob(User, int, String): void\l+ refreshPredictions(): void\l+ getJobsFor(Student): ArrayList\<Job\>\l+ utilization(): String\l- dispatch(): void\l- settle(Job, int): void\l}"];
+ Storage [label="{Storage|+ load(Path): Scheduler\l+ save(Scheduler, Path): void\l}"];
+ SampleData [label="{SampleData|+ build(): Scheduler\l+ main(String[]): void\l}"];
+
+ Identifiable [label="{«interface» Identifiable|+ getId(): String\l}", fillcolor="#E8F4EA"];
+ Comparable [label="{«interface» Comparable\<Job\>|+ compareTo(Job): int\l}", fillcolor="#E8F4EA"];
+ User [label="{«abstract» User|- id: String\l- name: String\l- password: String\l|+ getId(): String\l+ getName(): String\l+ passwordMatches(String): boolean\l+ getRole(): String  «abstract»\l+ canManage(Job): boolean  «abstract»\l+ displayName(): String\l}"];
+ Student [label="{Student|- email: String\l- phone: String\l- allowance: TimeAllowance\l|+ getRole(): String\l+ canManage(Job): boolean\l+ getAllowance(): TimeAllowance\l}"];
+ Administrator [label="{Administrator|+ USERNAME = \"admin\"\l+ PASSWORD = \"gpu2026\"\l|+ getRole(): String\l+ canManage(Job): boolean\l}"];
+ AccessRequest [label="{AccessRequest|- id, name, email, phone, password: String\l- status: String\l|+ approve(): void\l+ reject(): void\l}"];
+ TimeAllowance [label="{TimeAllowance|- allocated: int\l- used: int\l- reserved: int\l|+ getAvailable(): int\l+ reserve(int): void\l+ settle(int, int): void\l+ setAllocated(int): void\l+ grant(int): void\l}"];
+ Job [label="{Job|- jobId: int\l- studentId, title, applicationName,\l   description, taskSize: String\l- workloadUnits, estimatedDuration: int\l- submissionTime, startTime, finishTime,\l   cancellationTime: LocalDateTime\l- status: Status (QUEUED, RUNNING,\l   COMPLETED, CANCELLED)\l- assignedGpuId, chargedMinutes: int\l- cancelledBy, cancellationReason: String\l- queuePosition: int\l- predictedStart, predictedFinish: LocalDateTime\l|+ durationFor(String): int\l+ start(int, LocalDateTime): void\l+ complete(LocalDateTime): void\l+ cancel(LocalDateTime, String, String): void\l+ markSettled(int): void\l+ runtime(LocalDateTime): int\l+ remainingRuntime(LocalDateTime): int\l+ remainingWait(LocalDateTime): int\l+ compareTo(Job): int\l}"];
+ GPU [label="{GPU|- id: int\l- currentJobId: int\l|+ isFree(): boolean\l+ assign(int): void\l+ release(): void\l}"];
+
+ {rank=same; LoginFrame; DashboardFrame;}
+ {rank=same; AdminFrame; StudentFrame;}
+
+ Main -> LoginFrame [style=dashed, arrowhead=open, xlabel="opens"];
+ Main -> Storage [style=dashed, arrowhead=open];
+ AdminFrame -> DashboardFrame [arrowhead=empty];
+ StudentFrame -> DashboardFrame [arrowhead=empty];
+ LoginFrame -> Scheduler [style=dashed, arrowhead=open, xlabel="uses"];
+ DashboardFrame -> Scheduler [style=dashed, arrowhead=open, xlabel="uses"];
+ Storage -> Scheduler [style=dashed, arrowhead=open, xlabel="saves/loads"];
+ SampleData -> Scheduler [style=dashed, arrowhead=open];
+
+ Scheduler -> Student [dir=back, arrowtail=diamond, headlabel="0..*"];
+ Scheduler -> AccessRequest [dir=back, arrowtail=diamond, headlabel="0..*"];
+ Scheduler -> Job [dir=back, arrowtail=diamond, headlabel="0..*"];
+ Scheduler -> GPU [dir=back, arrowtail=diamond, headlabel="4"];
+ Scheduler -> Administrator [dir=back, arrowtail=diamond, headlabel="1"];
+ Student -> User [arrowhead=empty];
+ Administrator -> User [arrowhead=empty];
+ User -> Identifiable [style=dashed, arrowhead=empty];
+ Job -> Identifiable [style=dashed, arrowhead=empty];
+ Job -> Comparable [style=dashed, arrowhead=empty];
+ Student -> TimeAllowance [dir=back, arrowtail=diamond, headlabel="1"];
+}

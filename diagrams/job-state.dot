@@ -1,0 +1,11 @@
+digraph states {
+ graph [rankdir=LR, bgcolor=white, pad=0.25];
+ node [shape=box, style="rounded,filled", fillcolor="#EFF6FC", color="#1C67B1", fontname="DejaVu Sans"];
+ start [label="Student confirms job", shape=oval, fillcolor="#E2E8F0"];
+ Queued; Running; Completed [fillcolor="#E2F3E7"]; Cancelled [fillcolor="#FCEEEE"];
+ start -> Queued [label="duration reserved"];
+ Queued -> Running [label="GPU free; start time set"];
+ Queued -> Cancelled [label="release all; charge 0"];
+ Running -> Completed [label="full execution; charge duration"];
+ Running -> Cancelled [label="charge elapsed; release reservation"];
+}
